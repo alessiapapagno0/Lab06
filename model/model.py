@@ -35,7 +35,20 @@ class DepositoStrumenti:
             Funzione che legge tutti gli strumenti nel database
             :return: una lista con tutti gli strumenti presenti oppure None
         """
-        # TODO
+        conn=get_connection() #stabilisco la connessione e creo il cursore
+        cursore=conn.cursor(dictionary=True)
+        query='''SELECT *  
+                FROM strumento'''
+        cursore.execute(query) #prendo tutti i strumenti dal database
+        lista_strumenti=[]
+        for row in cursore: #per ogni strumento, creo un oggetto della classe Strumento
+            s=Strumento(row['codice'], row['tipo'],row['marca'],int(row['anno_acquisto']),float(row['valore']),row['disponibile'])
+            lista_strumenti.append(s) #creo una collezione di oggetti
+
+        if lista_strumenti==[]: #se la lista è vuota, restituisce None
+            return None
+        else:
+            return lista_strumenti
 
     def cerca_strumenti_per_tipo(self, tipo) -> list[Strumento] | None:
         """
@@ -43,4 +56,21 @@ class DepositoStrumenti:
             :param tipo: il tipo dello strumento (es. "Chitarra")
             :return: una lista con tutti gli strumenti del tipo indicato oppure None
         """
-        # TODO
+        conn=get_connection()
+        cursore=conn.cursor(dictionary=True) #faccio la stessa cosa in questa funzione
+        query='''SELECT *
+                FROM strumento
+                WHERE tipo = %s '''
+
+        cursore.execute(query,(tipo,))
+
+        lista_strumenti_per_tipo= []
+        for row in cursore:  # per ogni strumento, creo un oggetto della classe Strumento
+            s = Strumento(row['codice'], row['tipo'], row['marca'], int(row['anno_acquisto']), float(row['valore']),
+                          row['disponibile'])
+            lista_strumenti_per_tipo.append(s)  # creo una collezione di oggetti
+
+        if lista_strumenti_per_tipo == []:  # se la lista è vuota, restituisce None
+            return None
+        else:
+            return lista_strumenti_per_tipo

@@ -6,7 +6,6 @@ from UI.alert import AlertManager
     - Rappresenta l'interfaccia utente
     - Riceve i dati dal MODELLO e li presenta senza modificarli
 '''
-
 class View:
     def __init__(self, page: ft.Page):
         # Page
@@ -24,6 +23,9 @@ class View:
         # Elementi UI
         self.txt_titolo = None
         self.txt_responsabile = None
+
+        page.window.width = 1000 #allargo la finestra
+        page.window.height = 700
 
         # Non obbligatorio mettere già qui tutti gli elementi UI
 
@@ -63,7 +65,11 @@ class View:
         pulsante_conferma_responsabile = ft.Button("Conferma", on_click=self.controller.conferma_responsabile)
 
         # Altri Pulsanti da implementare (es. "Mostra" e "Cerca")
-        # TODO
+        testo_strumento=ft.Text("Strumenti", size=20)
+        pulsante_mostra = ft.Button("Mostra", on_click=self.controller.mostra_strumenti)
+
+        testo_tipo_strumento = ft.Text("Cerca Strumento per Tipo", size=20)
+        pulsante_cerca = ft.Button("Cerca", on_click=self.controller.cerca_strumenti_per_tipo)
 
         # --- LAYOUT ---
         self.page.add(
@@ -82,10 +88,18 @@ class View:
             ft.Divider(),
 
             # Sezione 3
-            # TODO
+            ft.Row(spacing=20,
+                   controls=[testo_strumento,pulsante_mostra,],
+                   alignment=ft.MainAxisAlignment.START), #allineo a sinistra il testo
+            self.lista_strumenti,
+            ft.Divider(), #fa la riga per dividere le sezioni
 
             # Sezione 4
-            # TODO
+            testo_tipo_strumento,
+            ft.Row(spacing=20,
+                   controls=[self.input_tipo_strumento,pulsante_cerca],
+                   alignment=ft.MainAxisAlignment.START),
+            self.lista_strumenti_ricerca
         )
 
     def cambia_tema(self, e):
